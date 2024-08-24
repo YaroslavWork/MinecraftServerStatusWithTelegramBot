@@ -6,14 +6,14 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 
 TOKEN = ''
 with open('token.txt') as f:
-    TOKEN = f.read()
+    TOKEN = f.read().strip()
 
 BOT_USERNAME = "@minecraft_server_TgBbot"
 CHAT_ID = "@TgB_server"
 
 log_directory = ''
-with open('directory.txt') as f:
-    log_directory = f.read()
+with open('direction.txt') as f:
+    log_directory = f.read()[:-1]
 
 last_line_number = 0
 
