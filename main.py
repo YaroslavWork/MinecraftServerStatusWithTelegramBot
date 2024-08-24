@@ -4,12 +4,16 @@ import time
 import telegram
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-TOKEN = ""
+TOKEN = ''
 with open('token.txt') as f:
     TOKEN = f.read()
 
 BOT_USERNAME = "@minecraft_server_TgBbot"
 CHAT_ID = "@TgB_server"
+
+log_directory = ''
+with open('directory.txt') as f:
+    log_directory = f.read()
 
 last_line_number = 0
 
@@ -29,7 +33,7 @@ async def send_message(bot):
     last_line_number = len(file_text)
 
 def read_log_file():
-    with open("latest.log") as f:
+    with open(log_directory) as f:
         return f.readlines()
 
 
