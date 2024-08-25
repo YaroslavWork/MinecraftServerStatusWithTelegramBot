@@ -56,7 +56,7 @@ def set_content(content):
     if "joined the game" in content:
         name = content.split("joined the game")[0].split(" ")[3].strip()
         if name not in all_names:
-            json_string.append({"name": name, "is_online": True, "time": time.time(), "advancements": [], "kills": 0})
+            json_string.append({"name": name, "is_online": True, "time": time.time(), "advancements": [], "kills": 0, "time_spent": 0})
         else:
             for i in json_string:
                 if i['name'] == name:
@@ -70,6 +70,7 @@ def set_content(content):
         for i in json_string:
             if i['name'] == name:
                 i['is_online'] = False
+                i['time_spent'] += time.time() - i['time']
                 i['time'] = time.time()
         writing_stats(json.dumps(json_string, indent=4))
         return f"{name} left the game"
