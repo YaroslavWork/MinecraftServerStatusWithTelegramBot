@@ -49,7 +49,7 @@ async def register_command(update: Update, context: ContextTypes):
             return
         else:
             # Add username to the whitelist
-            json_string.append({"uuid": generate_offline_uuid(processed_text), "name": processed_text})
+            json_string.append({"name": processed_text, "uuid": generate_offline_uuid(processed_text)})
             with open(whitelist_directory, 'w') as f:
                 f.write(json.dumps(json_string, indent=4))
                 f.close()
@@ -104,15 +104,17 @@ async def info_command(update: Update, context: ContextTypes):
 
 
 if __name__ == "__main__":
-    print("Starting bot...")
-    with open('token.txt') as f:
-        TOKEN = f.read().strip()
-    app = Application.builder().token(TOKEN).build()
+    # print("Starting bot...")
+    # with open('token.txt') as f:
+    #     TOKEN = f.read().strip()
+    # app = Application.builder().token(TOKEN).build()
+    #
+    # app.add_handler(CommandHandler("start", start_command))
+    # app.add_handler(CommandHandler("info", info_command))
+    # app.add_handler(CommandHandler("online", online_command))
+    # app.add_handler(CommandHandler("register", register_command))
+    #
+    # print("Polling...")
+    # app.run_polling(poll_interval=3)
 
-    app.add_handler(CommandHandler("start", start_command))
-    app.add_handler(CommandHandler("info", info_command))
-    app.add_handler(CommandHandler("online", online_command))
-    app.add_handler(CommandHandler("register", register_command))
-
-    print("Polling...")
-    app.run_polling(poll_interval=3)
+    print(generate_offline_uuid("Olix"))
