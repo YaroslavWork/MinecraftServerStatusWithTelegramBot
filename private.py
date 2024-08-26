@@ -8,11 +8,23 @@ from functionality import convert_seconds_to_time, relative_time
 
 
 async def start_command(update: Update, context: ContextTypes):
-    await update.message.reply_text(text="Hello, I'm a bot from TgB server. I'm giving some stats about players who play on our server.\n"
-                                         "If you want to see the stats, type /stats [username].")
+    await update.message.reply_text(text="Hello, I'm a bot from TgB server. I'm giving some stats about players who play on our server."
+                                         "If you want to see the information, type /info [username].")
 
+async def online_command(update: Update, context: ContextTypes):
+    with open('stats.json') as f:
+        string = "".join(f.readlines())
+        f.close()
+    json_string = json.loads(string)
+    info_str = ""
+    for i in json_string:
+        if i['is_online']:
+            info_str += f"✅ {i['name']} online.\n"
+        else:
+            info_str += f"❌ {i['name']} offline.\n"
+    await update.message.reply_text(text=info_str)
 
-async def stats_command(update: Update, context: ContextTypes):
+async def info_command(update: Update, context: ContextTypes):
     message_type: str = update.message.chat.type
     text: str = update.message.text
 
@@ -52,7 +64,8 @@ if __name__ == "__main__":
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start_command))
-    app.add_handler(CommandHandler("stats", stats_command))
+    app.add_handler(CommandHandler("info", info_command))
+    app.add_handler(CommandHandler("online", online_command))
 
     print("Polling...")
     app.run_polling(poll_interval=3)
