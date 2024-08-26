@@ -8,8 +8,18 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, Appli
 
 from functionality import convert_seconds_to_time, relative_time
 
+
 def generate_offline_uuid(username):
-    return str(uuid.uuid3(uuid.NAMESPACE_DNS, username))
+    # Prefix the username with "OfflinePlayer:"
+    name = "OfflinePlayer:" + username
+
+    # Create an MD5 hash of the "OfflinePlayer:<username>" string
+    md5_hash = hashlib.md5(name.encode('utf-8')).hexdigest()
+
+    # Convert the MD5 hash into a UUID format
+    offline_uuid = uuid.UUID(md5_hash)
+
+    return str(offline_uuid)
 
 
 async def start_command(update: Update, context: ContextTypes):
@@ -104,15 +114,17 @@ async def info_command(update: Update, context: ContextTypes):
 
 
 if __name__ == "__main__":
-    print("Starting bot...")
-    with open('token.txt') as f:
-        TOKEN = f.read().strip()
-    app = Application.builder().token(TOKEN).build()
+    # print("Starting bot...")
+    # with open('token.txt') as f:
+    #     TOKEN = f.read().strip()
+    # app = Application.builder().token(TOKEN).build()
+    #
+    # app.add_handler(CommandHandler("start", start_command))
+    # app.add_handler(CommandHandler("info", info_command))
+    # app.add_handler(CommandHandler("online", online_command))
+    # app.add_handler(CommandHandler("register", register_command))
+    #
+    # print("Polling...")
+    # app.run_polling(poll_interval=3)
 
-    app.add_handler(CommandHandler("start", start_command))
-    app.add_handler(CommandHandler("info", info_command))
-    app.add_handler(CommandHandler("online", online_command))
-    app.add_handler(CommandHandler("register", register_command))
-
-    print("Polling...")
-    app.run_polling(poll_interval=3)
+    print(generate_offline_uuid("stakanchyk2041"))
