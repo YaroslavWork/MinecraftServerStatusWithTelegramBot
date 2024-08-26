@@ -5,16 +5,14 @@ import json
 import telegram
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
+from functionality import writing_stats, read_log_file
+
 TOKEN = ''
 with open('token.txt') as f:
     TOKEN = f.read().strip()
 
 BOT_USERNAME = "@minecraft_server_TgBbot"
 CHAT_ID = "@TgB_server"
-
-log_directory = ''
-with open('direction.txt') as f:
-    log_directory = f.read()[:-1]
 
 last_line_number = 0
 
@@ -34,16 +32,6 @@ async def send_message(bot):
     if last_lines:
         await bot.send_message(chat_id=CHAT_ID, text=f"{last_lines}")
     last_line_number = len(file_text)
-
-
-def read_log_file():
-    with open(log_directory) as f:
-        return f.readlines()
-
-
-def writing_stats(json_string):
-    with open('stats.json', 'w') as f:
-        f.write(json_string)
 
 
 def set_content(content):
@@ -85,7 +73,9 @@ def set_content(content):
                 i['advancements'].append(advancement)
         writing_stats(json.dumps(json_string, indent=4))
         return f"{name} has made the advancement: {advancement}"
-
+    elif "/ERROR" in content:
+        print("Server error:", content)
+        return ""
     elif content.split(" ")[3] in all_names:
         name = content.split(" ")[3].strip()
         for i in json_string:
