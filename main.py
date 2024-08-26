@@ -92,6 +92,9 @@ def set_content(content):
 
 async def main():
     bot = telegram.Bot(token = TOKEN)
+    file_text = await asyncio.to_thread(read_log_file)
+    global last_line_number
+    last_line_number = len(file_text)
     while True:
         try:
             await send_message(bot)
