@@ -21,7 +21,7 @@ async def register_command(update: Update, context: ContextTypes):
     text: str = update.message.text
 
     whitelist_directory = ""
-    with open('whiltelist_direction.txt') as f:
+    with open('whitelist_direction.txt') as f:
         whitelist_directory = f.read().strip()
 
     with open(whitelist_directory) as f:
