@@ -1,15 +1,61 @@
 import json
 import time
+import uuid
+import hashlib
 
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, Application, MessageHandler
 
 from functionality import convert_seconds_to_time, relative_time
 
+def generate_offline_uuid(username):
+    return str(uuid.uuid3(uuid.NAMESPACE_DNS, username))
+
 
 async def start_command(update: Update, context: ContextTypes):
     await update.message.reply_text(text="Hello, I'm a bot from TgB server. I'm giving some stats about players who play on our server."
                                          "If you want to see the information, type /info [username].")
+
+async def register_command(update: Update, context: ContextTypes):
+    message_type: str = update.message.chat.type
+    text: str = update.message.text
+
+    whitelist_directory = ""
+    with open('whiltelist_direction.txt') as f:
+        whitelist_directory = f.read().strip()
+
+    with open(whitelist_directory) as f:
+        json_string = json.loads("".join(f.readlines()))
+        f.close()
+
+    all_names = [i['name'] for i in json_string]
+
+    processed_text = text.replace("/register ", "")
+    if message_type == "private":
+        if text == "":
+            await update.message.reply_text(text="You need to type a username after /register command (e.g. /register Notch).")
+            return
+        # Check if text has spaces
+        elif " " in processed_text:
+            await update.message.reply_text(text="Username cannot contain spaces.")
+            return
+        # Special characters
+        elif not processed_text.isalnum():
+            await update.message.reply_text(text="Username cannot contain special characters.")
+            return
+        # Check if username is already in the whitelist
+        elif processed_text in all_names:
+            await update.message.reply_text(text="Username is already in the whitelist.")
+            return
+        else:
+            # Add username to the whitelist
+            json_string.append({"uuid": generate_offline_uuid(processed_text), "name": processed_text})
+            with open(whitelist_directory, 'w') as f:
+                f.write(json.dumps(json_string, indent=4))
+                f.close()
+            await update.message.reply_text(text="Username added to the whitelist.")
+
+
 
 async def online_command(update: Update, context: ContextTypes):
     with open('stats.json') as f:
@@ -66,6 +112,7 @@ if __name__ == "__main__":
     app.add_handler(CommandHandler("start", start_command))
     app.add_handler(CommandHandler("info", info_command))
     app.add_handler(CommandHandler("online", online_command))
+    app.add_handler(CommandHandler("register", register_command))
 
     print("Polling...")
     app.run_polling(poll_interval=3)

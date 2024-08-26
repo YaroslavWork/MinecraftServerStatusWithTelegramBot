@@ -23,6 +23,8 @@ async def send_message(bot):
     file_text = await asyncio.to_thread(read_log_file)
     last_lines = ""
     cur_line_number = last_line_number - 0
+    if len(file_text) < last_line_number:
+        last_line_number = len(file_text)-1
     for i in range(last_line_number, len(file_text)):
         cur_line_number += 1
         content = set_content(file_text[i])
@@ -64,7 +66,8 @@ def set_content(content):
         return f"{name} left the game"
     elif "lost connection" in content:
         pass
-
+    elif "moved too quickly!" in content:
+        pass
     elif "has made the advancement" in content:
         name = content.split(" ")[3]
         advancement = content.split("has made the advancement ")[1].strip()[1:-1]
