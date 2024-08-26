@@ -1,3 +1,27 @@
 [
-
+    {
+        "name": "Olix",
+        "is_online": false,
+        "time": 1724611847.2460139,
+        "advancements": [
+            "Stone Age",
+            "Monster Hunter",
+            "Getting an Upgrade"
+        ],
+        "kills": 1,
+        "time_spent": 5503.931580543518
+    },
+    {
+        "name": "stakanchyk2041",
+        "is_online": false,
+        "time": 1724666092.8925397,
+        "advancements": [
+            "Stone Age",
+            "Getting an Upgrade",
+            "Acquire Hardware",
+            "Sweet Dreams"
+        ],
+        "kills": 0,
+        "time_spent": 2314.3438074588776
+    }
 ]
