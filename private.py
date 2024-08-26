@@ -114,17 +114,15 @@ async def info_command(update: Update, context: ContextTypes):
 
 
 if __name__ == "__main__":
-    # print("Starting bot...")
-    # with open('token.txt') as f:
-    #     TOKEN = f.read().strip()
-    # app = Application.builder().token(TOKEN).build()
-    #
-    # app.add_handler(CommandHandler("start", start_command))
-    # app.add_handler(CommandHandler("info", info_command))
-    # app.add_handler(CommandHandler("online", online_command))
-    # app.add_handler(CommandHandler("register", register_command))
-    #
-    # print("Polling...")
-    # app.run_polling(poll_interval=3)
+    print("Starting bot...")
+    with open('token.txt') as f:
+        TOKEN = f.read().strip()
+    app = Application.builder().token(TOKEN).build()
 
-    print(generate_offline_uuid("stakanchyk2041"))
+    app.add_handler(CommandHandler("start", start_command))
+    app.add_handler(CommandHandler("info", info_command))
+    app.add_handler(CommandHandler("online", online_command))
+    app.add_handler(CommandHandler("register", register_command))
+
+    print("Polling...")
+    app.run_polling(poll_interval=3)
